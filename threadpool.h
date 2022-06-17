@@ -4,7 +4,7 @@
 
 #include <pthread.h>
 #include <list>
-#include  <locker.h>
+#include  "locker.h"
 #include  <iostream>
 //模板参数为任务类
 template <typename  T>
@@ -54,7 +54,7 @@ class  threadpool {
                 
                 m_threads = new pthread_t (m_thread_number);
                 if(!m_threads) {
-                    throw std::exception;
+                    throw std::exception();
                 }
                 //创建线程，并且设置为线程脱离
                 for(int i=0; i<m_thread_number;i++) {
@@ -64,7 +64,7 @@ class  threadpool {
                         delete [] m_threads;
                         throw std::exception();
                     }
-
+                    //线程分离
                     if(pthread_detach(m_threads[i]) ) {
                         delete []m_threads;
                         throw std::exception();
@@ -82,10 +82,11 @@ class  threadpool {
       bool threadpool<T>::append (T* request) {
           m_queuelocker.lock();
           if(m_workqueue.size() > m_max_requests) {
-              m_queuelocker.unlock;
+              m_queuelocker.unlock();
               return false;
           }
           m_workqueue.emplace_back(request);
+          m_queuelocker.unlock();
           m_queuestat.post();
           return true;
       }
@@ -114,23 +115,10 @@ class  threadpool {
                 if(!request){
                     continue;
                 }
-                // request->process();
-                
+                 request->process();
             }
         }
            
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-#endif  THREADPOOL_H
+#endif  
