@@ -197,7 +197,7 @@ int main( int argc, char* argv[] ) {
             } else if( events[i].events & ( EPOLLRDHUP | EPOLLHUP | EPOLLERR ) ) {
                 util_timer * timer = timeusers[sockfd].timer;
                 users[sockfd].close_conn();
-                cb_func(&timeusers[sockfd],epollfd);
+                //cb_func(&timeusers[sockfd],epollfd);
                     if(timer) {
                         timer_lst.del_timer(timer);
                     }
@@ -213,7 +213,7 @@ int main( int argc, char* argv[] ) {
                     }
                 } else {
                     users[sockfd].close_conn();
-                    cb_func(&timeusers[sockfd],epollfd);
+                    //cb_func(&timeusers[sockfd],epollfd);
                     if(timer) {
                         timer_lst.del_timer(timer);
                     }
@@ -224,7 +224,7 @@ int main( int argc, char* argv[] ) {
                 if( !users[sockfd].write() ) {
                     util_timer* timer = timeusers[sockfd].timer;
                     users[sockfd].close_conn();
-                     cb_func(&timeusers[sockfd],epollfd);
+                   // cb_func(&timeusers[sockfd],epollfd);
                      if(timer) {
                         timer_lst.del_timer(timer);
                     }
